@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rock Paper Scissors - 10 Rounds</title>
+
+  <style>
+
+body {
+  background: linear-gradient(to right, #2F4F4Fea, #556B2F);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 1rem;
+}
+
+.game-container {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  margin-bottom: 1rem;
+}
+
+.scoreboard p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.choices {
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.choice {
+  padding: 1rem 1.5rem;
+  margin: 0.5rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.choice:hover {
+  transform: scale(1.1);
+}
+
+.result {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.final-result.hidden {
+  display: none;
+}
+
+.final-result h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.final-result button {
+  padding: 0.8rem 1.2rem;
+  border: none;
+  background-color: #fff;
+  color: #333;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .choice {
+    flex: 1 1 100%;
+  }
+}
+
+    
+  </style>
+
+</head>
+<body>
+  <div class="game-container">
+    <h1>Rock Paper Scissors</h1>
+    <div class="scoreboard">
+      <p>Round: <span id="round">1</span>/10</p>
+      <p>Player: <span id="playerScore">0</span></p>
+      <p>Computer: <span id="computerScore">0</span></p>
+    </div>
+
+    <div class="choices">
+      <button class="choice" data-choice="rock">🪨 Rock</button>
+      <button class="choice" data-choice="paper">📄 Paper</button>
+      <button class="choice" data-choice="scissors">✂️ Scissors</button>
+    </div>
+
+    <div class="result">
+      <p id="resultText">Make your move!</p>
+    </div>
+
+    <div class="final-result hidden" id="finalResult">
+      <h2 id="winnerText"></h2>
+      <button onclick="resetGame()">Play Again</button>
+    </div>
+  </div>
+  <script>
+    const choices = document.querySelectorAll('.choice');
+const resultText = document.getElementById('resultText');
+const playerScoreEl = document.getElementById('playerScore');
+const computerScoreEl = document.getElementById('computerScore');
+const roundEl = document.getElementById('round');
+const finalResult = document.getElementById('finalResult');
+const winnerText = document.getElementById('winnerText');
+
+let playerScore = 0;
+let computerScore = 0;
+let round = 1;
+const totalRounds = 10;
+
+choices.forEach(button => {
+  button.addEventListener('click', () => {
+    if (round > totalRounds) return;
+
+    const playerChoice = button.dataset.choice;
+    const computerChoice = getComputerChoice();
+    const winner = getWinner(playerChoice, computerChoice);
+
+    if (winner === 'player') {
+      playerScore++;
+      resultText.textContent = `You win this round! ${playerChoice} beats ${computerChoice}`;
+    } else if (winner === 'computer') {
+      computerScore++;
+      resultText.textContent = `Computer wins this round! ${computerChoice} beats ${playerChoice}`;
+    } else {
+      resultText.textContent = `It's a draw! You both chose ${playerChoice}`;
+    }
+
+    playerScoreEl.textContent = playerScore;
+    computerScoreEl.textContent = computerScore;
+
+    if (round === totalRounds) {
+      endGame();
+    } else {
+      round++;
+      roundEl.textContent = round;
+    }
+  });
+});
+
+function getComputerChoice() {
+  const options = ['rock', 'paper', 'scissors'];
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+function getWinner(player, computer) {
+  if (player === computer) return 'draw';
+
+  if (
+    (player === 'rock' && computer === 'scissors') ||
+    (player === 'paper' && computer === 'rock') ||
+    (player === 'scissors' && computer === 'paper')
+  ) {
+    return 'player';
+  } else {
+    return 'computer';
+  }
+}
+
+function endGame() {
+  finalResult.classList.remove('hidden');
+
+  if (playerScore > computerScore) {
+    winnerText.textContent = "🎉 You won the game!";
+    winnerText.textContent = "This Game is developed by Entri Eleavte B.No 28";
+  } else if (computerScore > playerScore) {
+    winnerText.textContent = "💻 Computer won the game!";
+    winnerText.textContent = "This Game is developed by Entri Eleavte B.No 28";
+    winnerText.textContent = "🤝 It's a tie!";
+    winnerText.textContent = "This Game is developed by Entri Eleavte B.No 28";
+  }
+}
+
+function resetGame() {
+  playerScore = 0;
+  computerScore = 0;
+  round = 1;
+  playerScoreEl.textContent = playerScore;
+  computerScoreEl.textContent = computerScore;
+  roundEl.textContent = round;
+  resultText.textContent = 'Make your move!';
+  finalResult.classList.add('hidden');
+}
+
+  </script>
+
+  
+</body>
+</html>
